@@ -1,0 +1,68 @@
+# Byte-compiled / optimized / DLL files
+
+**pycache**/
+*.py[cod]
+*.so
+
+# Virtual environment
+
+venv/
+.env/
+.venv/
+
+# Jupyter Notebook
+
+.ipynb_checkpoints/
+
+# Python cache
+
+*.pkl
+*.joblib
+
+# Logs
+
+logs/
+*.log
+
+# OS files
+
+.DS_Store
+Thumbs.db
+
+# IDE / Editor
+
+.vscode/
+.idea/
+
+# Data files (rất quan trọng)
+
+data/
+datasets/
+
+# Model weights (rất nặng)
+
+*.h5
+*.pt
+*.pth
+*.ckpt
+
+# Training outputs
+
+outputs/
+results/
+runs/
+
+# Matplotlib / temp images
+
+*.png
+*.jpg
+
+# Environment variables
+
+.env
+
+# Misc
+
+*.zip
+*.tar
+*.gz
