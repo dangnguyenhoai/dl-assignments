@@ -1,3 +1,1 @@
-1. Nhận xét bộ dữ liệu 04_CIGARET.csv:
-![boxplot](practice_preprocessing/result/boxplot.png)
-
+[Link báo cáo](https://www.overleaf.com/read/fpvtxnhktjrm#882ebc)

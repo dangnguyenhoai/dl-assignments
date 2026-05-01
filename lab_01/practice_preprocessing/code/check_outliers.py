@@ -1,22 +1,27 @@
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+import numpy as np
 
-def preprocess_data(path="data/04_CIGARET.csv"):
+#Draft code for checking outliers using IQR method and visualizing data
+def show_data(path="data/04_CIGARET.csv"):
     data = pd.read_csv(path)
     print(data)
 
     print(data.info())
     
     # Tính correlation
-    sns.heatmap(data.corr(numeric_only=True), annot=True, cmap="coolwarm")
+    corr_matrix = data.corr(numeric_only=True)
+
+    mask = np.triu(np.ones_like(corr_matrix, dtype=bool))
+    sns.heatmap(corr_matrix, annot=True, cmap="coolwarm", mask=mask)
     plt.savefig("result/correlation.png", dpi=300, bbox_inches="tight")
     plt.show()
 
     print(data.iloc[0])
 
     for column in data.columns:
-        outliers = check_outliers(data, column)
+        outliers = check_outliers_IQR(data, column)
         print(f"Outliers in {column}:\n{outliers}\n")
     
     sns.boxplot(data=data)
@@ -27,7 +32,7 @@ def preprocess_data(path="data/04_CIGARET.csv"):
     plt.savefig("result/histogram.png", dpi=300, bbox_inches="tight")
     plt.show()
 
-def check_outliers(data, column):
+def check_outliers_IQR(data, column):
     Q1 = data[column].quantile(0.25)
     Q3 = data[column].quantile(0.75)
     IQR = Q3 - Q1
@@ -37,4 +42,4 @@ def check_outliers(data, column):
     return outliers
 
 if __name__ == "__main__":
-    preprocess_data()
+    show_data()
