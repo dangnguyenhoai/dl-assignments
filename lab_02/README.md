@@ -2,7 +2,7 @@
 
 * **Author:** Dang Nguyen Hoai - 2001230257
 * **Topic:** Lab 02 - Linear Regression for House Price Prediction
-* **Date:** Week 02 - April 2026
+* **Date:** Week 02 - May 2026
 
 ---
 
