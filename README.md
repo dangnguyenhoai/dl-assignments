@@ -14,6 +14,7 @@ Each week has its own folder (e.g., `lab_01`, `lab_02`, ...). Every lab typicall
 
 - **Lab 01**: See [`lab_01/`](./lab_01)
 - **Lab 02**: See [`lab_02/`](./lab_02)
+- **Lab 03**: See [`lab_03/`](./lab_03)
 
 > More labs will be added week by week throughout the course.
 
