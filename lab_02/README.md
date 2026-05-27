@@ -11,8 +11,8 @@
 The `23_HOMES.csv` dataset contains 40 observations of house sales with 8 input features and a target price (`Selling_Price`). 
 
 ### Key EDA Insights & Rationale:
-* **Target Leakage:** The correlation matrix reveals a near-perfect correlation ($\approx 0.99$) between `List_Price` and `Selling_Price`. Keeping `List_Price` would allow the model to "cheat" by copying the list price rather than learning the actual structural value of the house. Thus, `List_Price` was dropped.
-* **Scale Mismatch & Skewness:** Initial variables vary drastically in scale (e.g., selling prices in hundreds of thousands vs. rooms in single digits) and exhibit non-normal distributions (e.g., `Acres` is heavily right-skewed). Scaling is essential for stable gradient descent.
+* **Target Leakage:** The correlation matrix reveals a near-perfect correlation ($\approx 0.99$) between `List_Price` and `Selling_Price`. Keeping `List_Price` would allow the model to "cheat" by [...]
+* **Scale Mismatch & Skewness:** Initial variables vary drastically in scale (e.g., selling prices in hundreds of thousands vs. rooms in single digits) and exhibit non-normal distributions (e.g., [...])
 
 ![Correlation Heatmap](result/correlation_BP.png)
 
@@ -59,7 +59,7 @@ The loss curves show a steady, continuous convergence without signs of overfitti
 
 ## 4. Validation Results & Predictions Evaluation
 
-To evaluate the predictive performance, we tested the model on the unseen validation dataset (8 samples) and mapped the predictions back to the original USD range using the inverse `MinMaxScaler` transform.
+To evaluate the predictive performance, we tested the model on the unseen validation dataset (8 samples) and mapped the predictions back to the original USD range using the inverse `MinMaxScaler` [...]
 
 ### Predicted vs. Actual House Prices
 
@@ -76,11 +76,11 @@ To evaluate the predictive performance, we tested the model on the unseen valida
 
 ### Performance Metrics on Validation Set
 * **Mean Absolute Error (MAE):** Represents the average dollar difference between predictions and actual prices:
-  $$MAE = \frac{1}{n}\sum_{i=1}^n |y_i - \hat{y}_i| \approx \$43,216.01$$
+  $$MAE = \frac{1}{n}\sum_{i=1}^n |y_i - \hat{y}_i| \approx 43,216.01$$
 * **Mean Absolute Percentage Error (MAPE):** The average relative percentage error of the predictions:
   $$MAPE = \frac{1}{n}\sum_{i=1}^n \left| \frac{y_i - \hat{y}_i}{y_i} \right| \times 100\% \approx 10.62\%$$
 
 ### Predictions Analysis
-For a highly constrained dataset of 40 total samples (with only 32 samples used for training), a **MAPE of 10.62%** is exceptional. As shown in the scatter plot below, the predictions map closely to the perfect prediction line ($y = x$). This demonstrates that despite the extremely small sample size, our model successfully extracted the generalizable linear patterns connecting structural features to market values.
+For a highly constrained dataset of 40 total samples (with only 32 samples used for training), a **MAPE of 10.62%** is exceptional. As shown in the scatter plot below, the predictions map closely [...]
 
 ![Actual vs Predicted Prices Scatter Plot](result/predictions_plot.png)

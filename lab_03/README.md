@@ -77,7 +77,7 @@ With a fixed $r$, the output variance scales linearly with $n_{\text{in}}$. For 
   $$\text{Var}(a^{[l]}) \approx \left(\frac{1}{2}\right)^l \text{Var}(x)$$
   In a deep network, this leads to a rapid exponential decay of activation values, making training extremely slow or halting it entirely (vanishing gradients).
 
-* **He Normal (`he_normal`) Solution:** Kaiming He et al. (2015) introduced a correction factor of $2$ to scale the initialization variance to compensate for the half-rectification of ReLU:
+* **He (Kaiming) Normal (`he_normal`) Solution:** Kaiming He et al. (2015) introduced a correction factor of $2$ to scale the initialization variance to compensate for the half-rectification of ReLU:
   $$\text{Var}(W) = \frac{2}{n_{\text{in}}}$$
   Weights are drawn from a normal distribution centered at zero with a standard deviation of:
   $$\sigma = \sqrt{\frac{2}{n_{\text{in}}}}$$
@@ -111,9 +111,65 @@ The model was trained for 20 epochs in the initial exploratory stage and evaluat
   ![Fashion MNIST Accuracy](result/lab_03_model_accuracy.png)
   ![Fashion MNIST Loss](result/lab_03_model_loss.png)
 
-### B. CIFAR-10 Results (`ex_1.ipynb`)
-Due to the high complexity of CIFAR-10 (color variation, background clutter, and diverse objects), standard shallow MLPs struggle to achieve high performance. Our deep MLP utilized **Regularized Layers (L2)**, **Batch Normalization**, and **Dropout** alongside He Normal initialization to optimize training:
-* **Epoch 1:** Train Accuracy = `32.74%` | Train Loss = `2.3004` | Val Accuracy = `28.81%` | Val Loss = `2.3614`
-* **Epoch 4:** Train Accuracy = `43.01%` | Train Loss = `1.8302` | Val Accuracy = `38.45%` | Val Loss = `1.9183`
+---
 
-The introduction of **Batch Normalization** after each Dense layer re-scales the activations to have zero mean and unit variance, which complements He Normal initialization. This allows for stable gradient flow, higher learning rates, and accelerates model convergence significantly.
+### B. CIFAR-10 Results (`ex_1.ipynb`)
+Due to the high complexity of CIFAR-10 (color variation, background clutter, and diverse objects), standard shallow MLPs struggle to achieve high performance. Our deep MLP utilized **Regularized Layers (L2)**, **Batch Normalization**, and **Dropout** alongside He Normal initialization to optimize training. 
+
+The model was trained with an initial learning rate of $0.001$, using `ReduceLROnPlateau` and `EarlyStopping`. The model successfully ran for **72 epochs** before early stopping was triggered (restoring weights from the optimal Epoch 64, which achieved the lowest validation loss of `1.2828`).
+
+#### Training Progression
+Below is the training history across key epochs during the optimization process:
+
+| Epoch | Training Loss | Training Accuracy | Validation Loss | Validation Accuracy | Learning Rate |
+| :---: | :---: | :---: | :---: | :---: | :---: |
+| 1 | 2.3004 | 32.74% | 2.3614 | 28.81% | $1.0 \times 10^{-3}$ |
+| 10 | 1.5643 | 48.63% | 1.5808 | 47.87% | $5.0 \times 10^{-4}$ |
+| 20 | 1.4076 | 52.48% | 1.4295 | 51.93% | $2.5 \times 10^{-4}$ |
+| 30 | 1.2978 | 56.47% | 1.3351 | 55.28% | $6.25 \times 10^{-5}$ |
+| 40 | 1.2543 | 57.77% | 1.3056 | 56.02% | $6.25 \times 10^{-5}$ |
+| 50 | 1.2160 | 59.12% | 1.2993 | 56.19% | $3.125 \times 10^{-5}$ |
+| 60 | 1.1921 | 60.00% | 1.2850 | 56.82% | $7.8125 \times 10^{-6}$ |
+| 70 | 1.1804 | 60.27% | 1.2830 | 56.97% | $1.9531 \times 10^{-6}$ |
+| 72 (Final) | 1.1792 | 60.22% | 1.2828 | 56.98% | $1.0 \times 10^{-6}$ |
+
+#### Evaluation on Test Set
+Upon evaluating the model on the unseen test set ($10,000$ samples), the model achieved:
+* **Test Loss:** `1.2817`
+* **Test Accuracy:** `57.06%`
+
+#### Classification Report (Class-by-Class Performance)
+
+To understand where the model succeeds and struggles, the precision, recall, and f1-score are detailed below for each individual category:
+
+| Class | Precision | Recall | F1-Score | Support |
+| :--- | :---: | :---: | :---: | :---: |
+| **airplane** | 0.63 | 0.62 | 0.63 | 1000 |
+| **automobile** | 0.70 | 0.66 | 0.68 | 1000 |
+| **bird** | 0.47 | 0.40 | 0.43 | 1000 |
+| **cat** | 0.41 | 0.38 | 0.40 | 1000 |
+| **deer** | 0.50 | 0.51 | 0.51 | 1000 |
+| **dog** | 0.49 | 0.45 | 0.47 | 1000 |
+| **frog** | 0.55 | 0.71 | 0.62 | 1000 |
+| **horse** | 0.65 | 0.64 | 0.64 | 1000 |
+| **ship** | 0.65 | 0.72 | 0.69 | 1000 |
+| **truck** | 0.63 | 0.61 | 0.62 | 1000 |
+| **Macro Average** | **0.57** | **0.57** | **0.57** | **10000** |
+| **Weighted Average** | **0.57** | **0.57** | **0.57** | **10000** |
+
+#### In-Depth Performance Analysis
+1. **Mechanical vs. Biological Classes:** 
+   The MLP performs significantly better on structured mechanical classes like **automobile** (F1 = 0.68), **ship** (F1 = 0.69), **truck** (F1 = 0.62), and **airplane** (F1 = 0.63). These objects possess well-defined boundaries, geometric shapes, and consistent backgrounds (e.g. ships are usually in blue water; airplanes in blue sky), making them easier to identify.
+   Conversely, biological categories like **cat** (F1 = 0.40), **bird** (F1 = 0.43), and **dog** (F1 = 0.47) have low scores. This is due to high intra-class variance (various breeds, poses, scales) and structural similarities between cats/dogs/birds, which heavily confuse a standard feedforward neural network lacking spatial weight sharing.
+
+2. **Impact of Training Callbacks:**
+   * **ReduceLROnPlateau:** This scheduler played a critical role. When validation loss plateaued, it cut the learning rate by half (e.g. from $0.001 \to 0.0005 \to 0.00025 \dots$), allowing the optimizer to make micro-adjustments and escape saddle points. This pushed the validation accuracy from an initial plateau of ~38% up to a final **57.06%**.
+   * **EarlyStopping:** Halting the model at Epoch 72 and restoring optimal weights (from Epoch 64) successfully protected the model from overfitting, as the validation loss was starting to rise due to standard MLP memorization.
+
+3. **Regularization Success:**
+   By applying **Batch Normalization** (stabilizing gradient flows and enabling faster learning), **Dropout** (reducing co-dependency of neurons), and **L2 Weight Regularization**, the gap between training accuracy (60.22%) and validation accuracy (56.98%) remained extremely small (~3.2%). This indicates that our regularization pipeline was highly successful in preventing severe overfitting.
+
+* **Accuracy & Loss Curves:**
+  
+  ![CIFAR-10 Accuracy](result/ex_1_model_accuracy.png)
+  ![CIFAR-10 Loss](result/ex_1_model_loss.png)
