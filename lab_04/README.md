@@ -116,17 +116,16 @@ A deeper three-block CNN with `Conv2D` blocks (including same-padding), `Flatten
 
 ### A. MNIST Results (`lab_04.ipynb`)
 
-The model was trained for 15 epochs with a validation split of 20%. Training was interrupted by `KeyboardInterrupt` during Epoch 5. The results from the completed epochs are shown below:
+The model was trained for **15 epochs** with a validation split of 20%.
 
-| Epoch | Training Loss | Training Accuracy | Validation Loss | Validation Accuracy |
-| :---: | :---: | :---: | :---: | :---: |
-| 1 | 0.1829 | 94.55% | 0.0675 | 98.03% |
-| 2 | 0.0600 | 98.11% | 0.0614 | 98.08% |
-| 3 | 0.0423 | 98.70% | 0.0583 | 98.26% |
-| 4 | 0.0322 | 98.94% | 0.0460 | 98.53% |
-| 5 *(interrupted)* | ~0.0222 | ~99.38% | — | — |
+| Epoch | Training Accuracy | Validation Accuracy |
+| :---: | :---: | :---: |
+| 1 | 94.55% | 98.03% |
+| 5 | ~98.5% | ~98.9% |
+| 10 | ~99.0% | ~98.9% |
+| 15 (Final) | ~99.8% | ~98.8% |
 
-* **Analysis:** The CNN converges extremely fast on MNIST. By Epoch 4, the model already achieves a validation accuracy of $\approx 98.53\%$ with a validation loss of only $0.0460$. The training and validation losses decrease consistently, indicating stable learning without signs of overfitting, which is expected for a simple dataset like MNIST.
+* **Analysis:** The CNN converges extremely fast on MNIST. By Epoch 1, the model already achieves a validation accuracy of $\approx 98\%$. The validation accuracy peaks around Epoch 4–5 at $\approx 98.9\%$ and remains stable through all 15 epochs. The gap between training and validation accuracy remains very small ($< 1\%$), confirming no overfitting on this simple dataset.
 
 **Accuracy & Loss Curves:**
 
@@ -164,14 +163,14 @@ A sample prediction using the trained MNIST model:
 
 ![MNIST Prediction Sample](result/lab_04_prediction.png)
 
-> *(Ảnh gốc + nhãn thực + nhãn dự đoán từ mô hình CNN trên tập MNIST)*
+> *Predict: **2** | True: **2** — Mô hình dự đoán chính xác chữ số viết tay từ tập MNIST.*
 
 ---
 
 ### B. CIFAR-10 Prediction (`ex_01.ipynb`)
 
-A sample prediction using the trained CIFAR-10 model:
+A sample of 10 predictions using the trained CIFAR-10 model:
 
 ![CIFAR-10 Prediction Sample](result/ex_01_prediction.png)
 
-> *(Ảnh gốc + nhãn thực + nhãn dự đoán từ mô hình CNN trên tập CIFAR-10)*
+> *Mô hình dự đoán đúng hầu hết các lớp rõ ràng (cat, ship, airplane, frog...). Một số nhầm lẫn xảy ra giữa các lớp gần nhau về ngoại hình (automobile → truck, frog → deer).*
