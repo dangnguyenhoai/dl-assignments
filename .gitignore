@@ -54,7 +54,7 @@ runs/
 
 # Matplotlib / temp images
 
-!result/*.png
+
 
 # Environment variables
 
